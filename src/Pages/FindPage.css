@@ -1,0 +1,11 @@
+.find-page-container .search-txt-wrapper{
+    display: flex;
+}
+.find-page-container .search-txt {
+    flex: 1;
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid #999;
+    font-size: 18px;
+    outline-color: #009879;
+}
