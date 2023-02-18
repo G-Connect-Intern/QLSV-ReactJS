@@ -1,16 +1,33 @@
 import { faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useState } from 'react';
 import './StudentTable.css'
 
-function StudentTable({ listSinhVien, keyword, handleDelete }) {
-    console.log(listSinhVien);
-    console.log(handleDelete);
-    console.log(keyword);
+function StudentTable({ listSinhVien, keyword, handleDelete, setCurrentUpdatingIndex, setCurrentUpdatingSinhVien, setIsShowingUpdate, handleMultiDelete }) {
+    const [listChecked, setListChecked] = useState([])
+    function onCheck(index, isChecked) {
+        if (isChecked) {
+            let nextListChecked = listChecked.slice()
+            nextListChecked.push(index)
+            nextListChecked.sort()
+            setListChecked(nextListChecked)
+        } else {
+            let nextListChecked = listChecked.slice()
+            let idx = nextListChecked.indexOf(index)
+            nextListChecked.splice(idx, 1)
+            nextListChecked.sort()
+            setListChecked(nextListChecked)
+        }
+    }
+    function onMultiRemove() {
+        handleMultiDelete(listChecked)
+        setListChecked([])
+    }
     return (
         <table className="styled-table">
             <thead>
                 <tr>
-                    <th></th>
+                    <th><button onClick={onMultiRemove}>Xóa</button></th>
                     <th>Mã SV</th>
                     <th>Tên sinh viên</th>
                     <th>Ngày sinh</th>
@@ -24,15 +41,15 @@ function StudentTable({ listSinhVien, keyword, handleDelete }) {
                     Array.isArray(listSinhVien) && !keyword
                         ? listSinhVien.map((SinhVien, index) => (
                             <tr key={index}>
-                                <td><input type='checkbox' /></td>
+                                <td><input type='checkbox' onChange={(e) => { onCheck(index, e.target.checked); }} checked={listChecked.includes(index)} /></td>
                                 <td>{SinhVien.MaSV}</td>
                                 <td>{SinhVien.TenSV}</td>
                                 <td>{SinhVien.NgaySinh}</td>
                                 <td>{SinhVien.GioiTinh}</td>
                                 <td>{SinhVien.MaKhoa}</td>
                                 <td>
-                                    <button className='edit-btn action-btn'><FontAwesomeIcon icon={faPenToSquare} /></button>
-                                        <button className='delete-btn action-btn' onClick={() => {handleDelete(index)}}><FontAwesomeIcon icon={faTrashCan} /></button>
+                                    <button className='edit-btn action-btn' onClick={() => { setCurrentUpdatingSinhVien(listSinhVien[index]); setCurrentUpdatingIndex(index); setIsShowingUpdate(true) }}><FontAwesomeIcon icon={faPenToSquare} /></button>
+                                    <button className='delete-btn action-btn' onClick={() => { handleDelete(index) }}><FontAwesomeIcon icon={faTrashCan} /></button>
                                 </td>
                             </tr>
                         )) : null
@@ -43,15 +60,15 @@ function StudentTable({ listSinhVien, keyword, handleDelete }) {
                             return (
                                 SinhVien.TenSV.includes(keyword) &&
                                 <tr key={index}>
-                                    <td><input type='checkbox' /></td>
+                                    <td><input type='checkbox' onChange={(e) => { onCheck(index, e.target.checked) }} checked={listChecked.includes(index)} /></td>
                                     <td>{SinhVien.MaSV}</td>
                                     <td>{SinhVien.TenSV}</td>
                                     <td>{SinhVien.NgaySinh}</td>
                                     <td>{SinhVien.GioiTinh}</td>
                                     <td>{SinhVien.MaKhoa}</td>
                                     <td>
-                                        <button className='edit-btn action-btn'><FontAwesomeIcon icon={faPenToSquare} /></button>
-                                        <button className='delete-btn action-btn' onClick={() => {handleDelete(index)}}><FontAwesomeIcon icon={faTrashCan} /></button>
+                                        <button className='edit-btn action-btn' onClick={() => { setCurrentUpdatingSinhVien(listSinhVien[index]); setCurrentUpdatingIndex(index); setIsShowingUpdate(true) }}><FontAwesomeIcon icon={faPenToSquare} /></button>
+                                        <button className='delete-btn action-btn' onClick={() => { handleDelete(index) }}><FontAwesomeIcon icon={faTrashCan} /></button>
                                     </td>
                                 </tr>
                             )

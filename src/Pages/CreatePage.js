@@ -17,7 +17,6 @@ function CreatePage({ handleCreate }) {
     const [mKhoa, setMKhoa] = useState("");
     const [isError, setIsError] = useState(null);
     const [isShowError, setIsShowError] = useState(false);
-    console.log(mGioiTinh);
 
     function onCreate() {
         if (mMaSV !== "" && mTenSV !== "" && mNgaySinh !== "" && mGioiTinh !== "" && mKhoa !== "" && mGioiTinh !== 0) {
