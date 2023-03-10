@@ -95,8 +95,8 @@ function CreatePage({ handleCreate, handleSetListSinhVien }) {
                     <label for="inputCity">Khoa</label>
                     <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" onChange={(e) => { setMKhoa(e.target.value) }}>
                         <option selected>Choose...</option>
-                        <option value="1">Điện tử viễn thông</option>
-                        <option value="2">Công nghệ thông tin</option>
+                        <option value="1">Công nghệ thông tin</option>
+                        <option value="2">Điện tử viễn thông</option>
                     </select>
                 </div>
             </div>
