@@ -42,14 +42,14 @@ function StudentTable({ listSinhVien, keyword, handleDelete, setCurrentUpdatingI
                         ? listSinhVien.map((SinhVien, index) => (
                             <tr key={index}>
                                 <td><input type='checkbox' onChange={(e) => { onCheck(index, e.target.checked); }} checked={listChecked.includes(index)} /></td>
-                                <td>{SinhVien.MaSV}</td>
-                                <td>{SinhVien.TenSV}</td>
-                                <td>{SinhVien.NgaySinh}</td>
-                                <td>{SinhVien.GioiTinh}</td>
-                                <td>{SinhVien.MaKhoa}</td>
+                                <td>{SinhVien.maSinhVien}</td>
+                                <td>{SinhVien.tenSinhVien}</td>
+                                <td>{SinhVien.ngaySinh}</td>
+                                <td>{SinhVien.gioiTinh}</td>
+                                <td>{SinhVien.khoa.tenKhoa}</td>
                                 <td>
                                     <button className='edit-btn action-btn' onClick={() => { setCurrentUpdatingSinhVien(listSinhVien[index]); setCurrentUpdatingIndex(index); setIsShowingUpdate(true) }}><FontAwesomeIcon icon={faPenToSquare} /></button>
-                                    <button className='delete-btn action-btn' onClick={() => { handleDelete(index) }}><FontAwesomeIcon icon={faTrashCan} /></button>
+                                    <button className='delete-btn action-btn' onClick={() => { handleDelete(SinhVien.sinhVienId) }}><FontAwesomeIcon icon={faTrashCan} /></button>
                                 </td>
                             </tr>
                         )) : null
@@ -58,17 +58,17 @@ function StudentTable({ listSinhVien, keyword, handleDelete, setCurrentUpdatingI
                     Array.isArray(listSinhVien) && keyword
                         ? listSinhVien.map(function (SinhVien, index) {
                             return (
-                                SinhVien.TenSV.includes(keyword) &&
+                                SinhVien.tenSinhVien.includes(keyword) &&
                                 <tr key={index}>
                                     <td><input type='checkbox' onChange={(e) => { onCheck(index, e.target.checked) }} checked={listChecked.includes(index)} /></td>
-                                    <td>{SinhVien.MaSV}</td>
-                                    <td>{SinhVien.TenSV}</td>
-                                    <td>{SinhVien.NgaySinh}</td>
-                                    <td>{SinhVien.GioiTinh}</td>
-                                    <td>{SinhVien.MaKhoa}</td>
+                                    <td>{SinhVien.maSinhVien}</td>
+                                    <td>{SinhVien.tenSinhVien}</td>
+                                    <td>{SinhVien.ngaySinh}</td>
+                                    <td>{SinhVien.gioiTinh}</td>
+                                    <td>{SinhVien.khoa.tenKhoa}</td>
                                     <td>
                                         <button className='edit-btn action-btn' onClick={() => { setCurrentUpdatingSinhVien(listSinhVien[index]); setCurrentUpdatingIndex(index); setIsShowingUpdate(true) }}><FontAwesomeIcon icon={faPenToSquare} /></button>
-                                        <button className='delete-btn action-btn' onClick={() => { handleDelete(index) }}><FontAwesomeIcon icon={faTrashCan} /></button>
+                                        <button className='delete-btn action-btn' onClick={() => { handleDelete(SinhVien.sinhVienId) }}><FontAwesomeIcon icon={faTrashCan} /></button>
                                     </td>
                                 </tr>
                             )

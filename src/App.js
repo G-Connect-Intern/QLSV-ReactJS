@@ -4,43 +4,50 @@ import HomePage from './Pages/HomePage';
 import CreatePage from './Pages/CreatePage';
 import UpdatePage from './Pages/UpdatePage';
 import MainLayout from './Layout/MainLayout';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import FindPage from './Pages/FindPage';
-
-class SinhVien {
-  constructor(MaSV, TenSV, NgaySinh, GioiTinh, MaKhoa) {
-    this.MaSV = MaSV;
-    this.TenSV = TenSV;
-    this.NgaySinh = NgaySinh;
-    this.GioiTinh = GioiTinh;
-    this.MaKhoa = MaKhoa;
-  }
-}
-
 
 function App() {
 
-  const [listSinhVien, setListSinhVien] = useState([
-    new SinhVien('AT180520', 'Ta Minh Huy', '2003-10-12', 'Nam', 'AT'),
-    new SinhVien('AT180521', 'Ta Minh Luan', '2003-10-12', 'Nam', 'AT'),
-    new SinhVien('AT180522', 'Vu Quang Minh', '2003-10-12', 'Nam', 'AT'),
-    new SinhVien('AT180523', 'Ta Van Thieu', '2003-10-12', 'Nam', 'AT'),
-    new SinhVien('AT180524', 'Vu Duy Luong', '2003-10-12', 'Nam', 'AT'),
-    new SinhVien('AT180525', 'Tran Duc Huan', '2003-10-12', 'Nam', 'AT'),
-    new SinhVien('AT180526', 'Do Van Phuong', '2003-10-12', 'Nam', 'AT'),
-    new SinhVien('AT180527', 'Hoang Vu Kien', '2003-10-12', 'Nam', 'AT'),
-    new SinhVien('AT180528', 'Pham Hai Nam', '2003-10-12', 'Nam', 'AT'),
-    new SinhVien('AT180529', 'Dam Duc Thanh', '2003-10-12', 'Nam', 'AT'),
-    new SinhVien('AT180530', 'Pham Huy Dai', '2003-10-12', 'Nam', 'AT'),
-    new SinhVien('AT180531', 'Vu Van Nghia', '2003-10-12', 'Nam', 'AT'),
-    new SinhVien('AT180532', 'Pham Thi Ngan', '2003-10-12', 'Nam', 'AT'),
-    new SinhVien('AT180533', 'Nguyen Thanh Phong', '2003-10-12', 'Nam', 'AT')
-  ])
+  const [listSinhVien, setListSinhVien] = useState([])
 
-  function handleDelete(index) {
-    let nextListSinhVien = listSinhVien.slice()
-    nextListSinhVien.splice(index, 1)
-    setListSinhVien(nextListSinhVien)
+  // Fetch
+
+  useEffect(() => {
+    console.log('Fetching...');
+    fetch("https://localhost:7187/api/SinhVien")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          setListSinhVien(result)
+        },
+        // Note: it's important to handle errors here
+        // instead of a catch() block so that we don't swallow
+        // exceptions from actual bugs in components.
+        (error) => {
+          console.log(error);
+        }
+      )
+  }, [])
+
+  function handleDelete(sinhVienId) {
+    console.log(sinhVienId);
+    fetch(`https://localhost:7187/api/SinhVien/${sinhVienId}`, {method: "DELETE"})
+    .then(() => {
+      fetch("https://localhost:7187/api/SinhVien")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          setListSinhVien(result)
+        },
+        // Note: it's important to handle errors here
+        // instead of a catch() block so that we don't swallow
+        // exceptions from actual bugs in components.
+        (error) => {
+          console.log(error);
+        }
+      )
+    })
   }
   function handleMultiDelete(arrIdx) {
     let nextListSinhVien = listSinhVien.slice()
@@ -76,7 +83,7 @@ function App() {
         } />
         <Route path="/create" element={
           <MainLayout title={"Thêm sinh viên"}>
-            <CreatePage handleCreate={handleCreate}/>
+            <CreatePage handleCreate={handleCreate} handleSetListSinhVien={setListSinhVien}/>
           </MainLayout>
         } />
       </Routes>

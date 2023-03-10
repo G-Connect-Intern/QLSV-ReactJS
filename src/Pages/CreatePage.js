@@ -9,7 +9,7 @@ class SinhVien {
         this.MaKhoa = MaKhoa;
     }
 }
-function CreatePage({ handleCreate }) {
+function CreatePage({ handleCreate, handleSetListSinhVien }) {
     const [mMaSV, setMMaSV] = useState("");
     const [mTenSV, setMTenSV] = useState("");
     const [mNgaySinh, setMNgaySinh] = useState("");
@@ -20,14 +20,44 @@ function CreatePage({ handleCreate }) {
 
     function onCreate() {
         if (mMaSV !== "" && mTenSV !== "" && mNgaySinh !== "" && mGioiTinh !== "" && mKhoa !== "" && mGioiTinh !== 0) {
-            handleCreate(new SinhVien(mMaSV, mTenSV, mNgaySinh, mGioiTinh === 1 ? "Nam" : "Nữ", mKhoa))
-            setIsError(false)
+            let s = {
+                "maSinhVien": mMaSV,
+                "tenSinhVien": mTenSV,
+                "ngaySinh": mNgaySinh,
+                "gioiTinh": mGioiTinh,
+                "khoaId": mKhoa
+            }
+            console.log(JSON.stringify(s));
+
+            fetch(`https://localhost:7187/api/SinhVien/`, {
+                method: "POST", body: JSON.stringify(s),
+                headers: {
+                    "Content-Type": "application/json",
+                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+            })
+                .then(() => {
+                    fetch("https://localhost:7187/api/SinhVien")
+                    .then(res => res.json())
+                    .then(
+                      (result) => {
+                        handleSetListSinhVien(result)
+                      },
+                      // Note: it's important to handle errors here
+                      // instead of a catch() block so that we don't swallow
+                      // exceptions from actual bugs in components.
+                      (error) => {
+                        console.log(error);
+                      }
+                    )
+                    setIsError(false)
+                })
         } else {
             setIsError(true)
         }
         showHideError()
     }
-    function showHideError(){
+    function showHideError() {
         setIsShowError(true)
         setTimeout(() => {
             setIsShowError(false)
@@ -55,15 +85,19 @@ function CreatePage({ handleCreate }) {
                     <label for="inputPassword4">Giới Tính</label>
                     <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" onChange={(e) => { setMGioiTinh(e.target.value) }}>
                         <option selected>Choose...</option>
-                        <option value="1">Nam</option>
-                        <option value="2">Nữ</option>
+                        <option value="Nam">Nam</option>
+                        <option value="Nữ">Nữ</option>
                     </select>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label for="inputCity">Khoa</label>
-                    <input type="text" class="form-control" placeholder="Khoa" onChange={(e) => { setMKhoa(e.target.value) }} />
+                    <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" onChange={(e) => { setMKhoa(e.target.value) }}>
+                        <option selected>Choose...</option>
+                        <option value="1">Điện tử viễn thông</option>
+                        <option value="2">Công nghệ thông tin</option>
+                    </select>
                 </div>
             </div>
             <button type="submit" class="btn btn-primary" onClick={onCreate}>Thêm Sinh Viên</button>
@@ -79,7 +113,7 @@ function CreatePage({ handleCreate }) {
             }
             {
 
-                (!isError &&  isShowError &&
+                (!isError && isShowError &&
                     <div class="alert alert-success" role="alert">
                         Thêm thành công!
                     </div>
