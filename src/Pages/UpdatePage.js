@@ -20,16 +20,26 @@ function UpdatePage({ handleUpdate, currentUpdatingIndex, currentUpdatingSinhVie
     const [isShowError, setIsShowError] = useState(false);
 
     useEffect(() => {
-        setMMaSV(currentUpdatingSinhVien.MaSV)
-        setMTenSV(currentUpdatingSinhVien.TenSV)
-        setMNgaySinh(currentUpdatingSinhVien.NgaySinh)
-        setMGioiTinh(currentUpdatingSinhVien.GioiTinh)
-        setMKhoa(currentUpdatingSinhVien.MaKhoa)
+        console.log('changed!');
+        console.log(currentUpdatingSinhVien);
+        console.log(currentUpdatingIndex);
+        setMMaSV(currentUpdatingSinhVien.maSinhVien)
+        setMTenSV(currentUpdatingSinhVien.tenSinhVien)
+        setMNgaySinh(currentUpdatingSinhVien.ngaySinh)
+        setMGioiTinh(currentUpdatingSinhVien.gioiTinh)
+        setMKhoa(currentUpdatingSinhVien.khoaId)
     }, [currentUpdatingSinhVien])
 
     function onUpdate() {
         if (mMaSV !== "" && mTenSV !== "" && mNgaySinh !== "" && mGioiTinh !== "" && mKhoa !== "" && mGioiTinh !== 0) {
-            handleUpdate(currentUpdatingIndex, new SinhVien(mMaSV, mTenSV, mNgaySinh, mGioiTinh === 1 ? "Nam" : "Nữ", mKhoa))
+            let s = {
+                "maSinhVien": mMaSV,
+                "tenSinhVien": mTenSV,
+                "ngaySinh": mNgaySinh,
+                "gioiTinh": mGioiTinh,
+                "khoaId": mKhoa
+            }
+            handleUpdate(currentUpdatingIndex, s)
             setIsError(false)
             setTimeout(() => {
                 setIsShowingUpdate(false)
@@ -39,7 +49,7 @@ function UpdatePage({ handleUpdate, currentUpdatingIndex, currentUpdatingSinhVie
         }
         showHideError()
     }
-    function showHideError(){
+    function showHideError() {
         setIsShowError(true)
         setTimeout(() => {
             setIsShowError(false)
@@ -48,7 +58,7 @@ function UpdatePage({ handleUpdate, currentUpdatingIndex, currentUpdatingSinhVie
 
     return (
         <div className="update-page-container">
-        <h2 className="update-page-title">Cập nhật sinh viên</h2>
+            <h2 className="update-page-title">Cập nhật sinh viên</h2>
             <div class="form-row">
                 <div class="form-group col-md-2">
                     <label for="inputEmail4">Mã Sinh Viên</label>
@@ -68,16 +78,18 @@ function UpdatePage({ handleUpdate, currentUpdatingIndex, currentUpdatingSinhVie
                     <label for="inputPassword4">Giới Tính</label>
                     <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" onChange={(e) => { setMGioiTinh(e.target.value) }} value={mGioiTinh}>
                         <option selected>Choose...</option>
-                        <option value="1">Nam</option>
-                        <option value="2">Nữ</option>
+                        <option value="Nam">Nam</option>
+                        <option value="Nữ">Nữ</option>
                     </select>
                 </div>
             </div>
-            <div class="form-row">
-                <div class="form-group col-md-12">
-                    <label for="inputCity">Khoa</label>
-                    <input type="text" class="form-control" placeholder="Khoa" onChange={(e) => { setMKhoa(e.target.value) }} value={mKhoa} />
-                </div>
+            <div class="form-row" style={{padding: "4px"}}>
+                <label for="inputCity">Khoa</label>
+                <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" onChange={(e) => { setMKhoa(e.target.value) }}>
+                    <option selected>Choose...</option>
+                    <option value="1">Điện tử viễn thông</option>
+                    <option value="2">Công nghệ thông tin</option>
+                </select>
             </div>
             <button type="submit" class="btn btn-primary" onClick={onUpdate}>Cập Nhật Sinh Viên</button>
             <br />
@@ -92,7 +104,7 @@ function UpdatePage({ handleUpdate, currentUpdatingIndex, currentUpdatingSinhVie
             }
             {
 
-                (!isError &&  isShowError &&
+                (!isError && isShowError &&
                     <div class="alert alert-success" role="alert">
                         Cập nhật thành công!
                     </div>

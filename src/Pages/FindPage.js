@@ -3,7 +3,7 @@ import StudentTable from "../Components/StudentTable";
 import './FindPage.css'
 import UpdatePage from "./UpdatePage";
 
-function FindPage({listSinhVien, handleDelete, handleUpdate}) {
+function FindPage({listSinhVien, handleDelete, handleUpdate, handleMultiDelete}) {
     const [keyword, setKeyword] = useState("")
     const [currentUpdatingIndex, setCurrentUpdatingIndex] = useState(-1)
     const [currentUpdatingSinhVien, setCurrentUpdatingSinhVien] = useState({})
@@ -18,7 +18,7 @@ function FindPage({listSinhVien, handleDelete, handleUpdate}) {
                     <UpdatePage currentUpdatingIndex={currentUpdatingIndex} currentUpdatingSinhVien={currentUpdatingSinhVien} handleUpdate={handleUpdate} setIsShowingUpdate={setIsShowingUpdate}/>
                 )
             }
-            <StudentTable listSinhVien={listSinhVien} handleDelete={handleDelete} setCurrentUpdatingIndex={setCurrentUpdatingIndex} setCurrentUpdatingSinhVien={setCurrentUpdatingSinhVien} setIsShowingUpdate={setIsShowingUpdate} keyword={keyword}/>
+            <StudentTable listSinhVien={listSinhVien} handleDelete={handleDelete} setCurrentUpdatingIndex={setCurrentUpdatingIndex} setCurrentUpdatingSinhVien={setCurrentUpdatingSinhVien} setIsShowingUpdate={setIsShowingUpdate} keyword={keyword} handleMultiDelete={handleMultiDelete}/>
         </div>
     );
 }
